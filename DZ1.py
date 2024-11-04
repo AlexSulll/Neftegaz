@@ -1,3 +1,4 @@
+import math
 metan = 0.891434
 etan = 0.039086
 propan = 0.018336
@@ -296,6 +297,114 @@ Si = [0,0,0,0,0,0,0,0,0,0]
 s = [0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 Wi = [0,0,0,0,0,0,0,0,0,0]
 w = [0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+B0i = [
+    4.00088,
+    4.00263,
+    4.02939,
+    4.33944,
+    4.06714,
+    4.0,
+    4.0,
+    3.50031,
+    3.50002,
+    2.50
+]
+C0i = [
+    0.76315,
+    4.33939,
+    6.60569,
+    9.44893,
+    8.97575,
+    8.95043,
+    11.6977,
+    0.13732,
+    2.04452,
+    0.00
+]
+D0i = [
+    820.659,
+    559.314,
+    479.856,
+    468.27,
+    438.27,
+    178.67,
+    182.326,
+    662.738,
+    919.306,
+    0.00
+]
+E0i = [
+    0.0046,
+    1.23722,
+    3.197,
+    6.89406,
+    5.25156,
+    21.836,
+    26.8142,
+    -0.1466,
+    -1.06044,
+    0.00
+]
+F0i = [
+    178.41,
+    223.284,
+    200.893,
+    183.636,
+    198.018,
+    840.538,
+    859.207,
+    680.562,
+    865.07,
+    0.00
+]
+G0i = [
+    8.74432,
+    13.1974,
+    19.1921,
+    24.4618,
+    25.1423,
+    33.4032,
+    38.6164,
+    0.90066,
+    2.03366,
+    0.00
+]
+H0i = [
+    1062.82,
+    1031.38,
+    955.312,
+    1914.1,
+    1905.02,
+    1774.25,
+    1826.59,
+    1740.06,
+    483.553,
+    0.00
+]
+I0i = [
+    -4.46921,
+    -6.01989,
+    -8.37267,
+    14.7824,
+    16.1388,
+    0,
+    0,
+    0,
+    0.01393,
+    0.00
+]
+J0i = [
+    1090.53,
+    1071.29,
+    1027.29,
+    903.185,
+    893.765,
+    0,
+    0,
+    0,
+    341.109,
+    0.00
+]
 
 SxiKi = 0
 for i in range(10):
@@ -356,7 +465,7 @@ def Bn(n):
     global smes,u,Ei,Eij,Ki
     for i in range(10):
         for j in range(10):
-            B += smes[i]*smes[j]*Bnij(n,i,j)*((Eij[i][j]*((Ei[j]*Ei[j])**(1/2)))**u[n])*((Ki[i]*Ki[j])**(3/2))
+            B += smes[i]*smes[j]*Bnij(n,i,j)*((Eij[i][j]*((Ei[i]*Ei[j])**(1/2)))**u[n])*((Ki[i]*Ki[j])**(3/2))
     return B
             
 def Bnij(n,i,j):
@@ -371,3 +480,51 @@ for n in range(12,18):
 for n in range(18,58):
     D.append(0)
 
+def A0(plotnost):
+    global a,b,t,u,D,c,k,U
+    A0 = 0
+    for n in range(58):
+        A0 += a[n]*plotnost**b[n]*t**(-u[n])*(b[n]*D[n]+(b[n]-c[n]*k[n]*plotnost**k[n])*U[n]*math.exp(-c[n]*plotnost**k[n]))
+    return A0
+def A1(plotnost):
+    global a,b,t,u,D,c,k,U
+    A1 = 0
+    for n in range(58):
+        A1 += a[n]*plotnost**b[n]*t**(-u[n])*((b[n]+1)*b[n]*D[n]+((b[n]-c[n]*k[n]*plotnost**k[n])*(b[n]-c[n]*k[n]*plotnost**k[n]+1)-c[n]*k[n]**2*plotnost**k[n])*U[n]*math.exp(-c[n]*plotnost**k[n]))
+    return A1
+plotnost0 = (10**3*davlenie*Kx**3)/(8.31451*t) #плотность на 0 шаге - приведенная плотность 
+def pirash(plotnost):
+    global t
+    pirash = plotnost*t*(1+A0(plotnost))
+    return pirash
+while abs((pirash(plotnost0)-pi)/pi) > 10**(-6):
+    plotnost0 += ((pi/t) - (1 + A0(plotnost0))*plotnost0)/(1+A1(plotnost0))
+def A2(plotnost):
+    global a,b,t,u,D,c,k,U
+    A2 = 0
+    for n in range(58):
+        A2 += a[n]*plotnost**b[n]*t**(-u[n])*(1-u[n])*(b[n]*D[n]+(b[n]-c[n]*k[n]*plotnost**k[n])*U[n]*math.exp(-c[n]*plotnost**k[n]))
+    return A2
+def A3(plotnost):
+    global a,b,t,u,D,c,k,U
+    A3 = 0
+    for n in range(58):
+        A3 += a[n]*plotnost**b[n]*t**(-u[n])*u[n]*(1-u[n])*(D[n]+U[n]*math.exp(-c[n]*plotnost**k[n]))
+    return A3
+A0 = A0(plotnost0)
+A1 = A1(plotnost0)
+A2 = A2(plotnost0)
+A3 = A3(plotnost0)
+z = 1 + A0
+cp0r = 0
+def cp0ri(i):
+    global B0i,C0i,D0i,E0i,F0i,G0i,H0i,I0i,J0i,t
+    det = t**(-1)
+    cp0ri = B0i[i] + C0i[i]*((D0i[i]*det)/math.sinh(D0i[i]*det))**2+E0i[i]*((F0i[i]*det)/math.cosh(F0i[i]*det))**2+G0i[i]*((H0i[i]*det)/math.sinh(H0i[i]*det))**2+I0i[i]*((J0i[i]*det)/math.cosh(J0i[i]*det))**2
+    return cp0ri
+for i in range(9):
+    cp0r += smes[i]*cp0ri(i)
+det = t**(-1)
+cp0r += smes[9]*(B0i[9] + E0i[9]*((F0i[9]*det)/math.cosh(F0i[9]*det))**2+I0i[9]*((J0i[9]*det)/math.cosh(J0i[9]*det))**2)
+kadiabat = ((1 + A1 + (1 + A2)**2)/(cp0r - 1 + A3))/z
+print('Показатель адиабаты равен k = ', kadiabat)
