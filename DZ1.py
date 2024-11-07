@@ -1,25 +1,25 @@
 import math
-metan = 0.965
-etan = 0.018
-propan = 0.0045
-u_butan = 0.001
-h_butan = 0.001
+metan = 0.891434
+etan = 0.039068
+propan = 0.018336
+u_butan = 0.002386
+h_butan = 0.002606
 neo_pentan = 0
-u_peptan = 0.0005
-h_pentan = 0.0003
+u_peptan = 0
+h_pentan = 0.000619
 neo_gecsan = 0
-h_gecsan = 0.0007
+h_gecsan = 0.000681
 geptan = 0
-azot = 0.003
-uglecisliy = 0.006
-geliy = 0
+azot = 0.044545
+uglecisliy = 0.00013
+geliy = 0.000177
 vodorod = 0
 
-davlenie = 0.1 #МПа
+davlenie = 20 #МПа
 tempC = -1 #C
-tempK = 250
 
-smes = [metan, etan, propan, u_butan, h_butan, neo_pentan, u_peptan, h_pentan, neo_gecsan, h_gecsan, geptan, azot, uglecisliy, geliy, vodorod]
+ri = [metan, etan, propan, u_butan, h_butan, neo_pentan, u_peptan, h_pentan, neo_gecsan, h_gecsan, geptan, azot, uglecisliy, geliy, vodorod]
+smes = []
 Ki = [0.4619255, 0.5279209, 0.583749, 0.6406937, 0.6341423,0.6738577, 0.6738577, 0.6798307, 0.7175118, 0.7175118,0.7175118, 0.4479153, 0.4557489, 0.3589888, 0.3514916]
 Kij = [[1, 1, 1.007619, 1, 0.997596, 1, 1, 1.002529, 1, 0.982962, 0.982962, 1.00363, 0.995933, 1, 1.02326],[1, 1, 0.986893, 1, 1, 1, 1, 1, 1, 1, 1, 1.00796, 1.00851, 1, 1.02034],[1.007619, 0.986893, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[0.997596, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[1.002529, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[0.982962, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.910183, 1, 1],[0.982962, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],[1.00363, 1.00796, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.982361, 0.982361, 1.03227],[0.995933, 1.00851, 1, 1, 1, 1, 1, 1, 1, 0.910183, 1, 0.982361, 1, 1, 1],[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.982361, 1, 1, 1],[1.02326, 1.02034, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1.03227, 1, 1, 1]]
 a = [0.1538326, 1.341953, -2.998583, -0.04831228, 0.3757965, -1.589575, -0.05358847, 0.88659463, -0.71023704, -1.471722, 1.32185035, -0.78665925, 0.00000000229129, 0.1576724, -0.4363864, -0.04408159, -0.003433888, 0.03205905, 0.02487355, 0.07332279, -0.001600573, 0.6424706, -0.4162601, -0.06689957, 0.2791795, -0.6966051, -0.002860589, -0.008098836, 3.150547, 0.007224479, -0.7057529, 0.5349792, -0.07931491, -1.418465, -5.99905*10**(-17), 0.1058402, 0.03431729, -0.007022847, 0.02495587, 0.04296818, 0.7465453, -0.2919613, 7.294616, -9.936757, -0.005399808, -0.2432567, 0.04987016, 0.003733797, 1.874951, 0.002168144, -0.6587164, 0.000205518, 0.009776195, -0.02048708, 0.01557322, 0.006862415, -0.001226752, 0.002850908]
@@ -50,6 +50,16 @@ G0i = [8.74432, 13.1974, 19.1921, 25.1423, 24.4618, 33.1688, 33.1688, 33.4032, 3
 H0i = [1062.82, 1031.38, 955.312, 1905.02, 1914.1, 1919.37, 1919.37, 1774.25, 1826.59, 1826.59, 1826.59, 1740.06, 483.553, 0.00, 1651.71]
 I0i = [-4.46921, -6.01989, -8.37267, 16.1388, 14.7824, 0, 0, 0, 0, 0, 0, 0, 0.01393, 0.00, -1.3756]
 J0i = [1090.53, 1071.29, 1027.29, 893.765, 903.185, 0, 0, 0, 0, 0, 0, 0, 341.109, 0.00, 1671.69]
+zci = [0.9981, 0.992, 0.9834, 0.971, 0.9682, 0.953, 0.953, 0.945, 0.919, 0.919, 0.919, 0.9997, 0.9947, 1.0005, 1.0006]
+
+Srizci = 0
+for i in range(len(ri)):
+    Srizci += (ri[i]/zci[i])
+
+for i in range(len(ri)):
+    smes.append((ri[i]/zci[i])/Srizci)
+
+tempK = tempC + 273.15
 
 SxiKi = 0
 for i in range(len(smes)):
@@ -96,15 +106,15 @@ for i in range(len(smes)-1):
 V = (V1 + 2*V2)**(1/5)
 
 U = []
-for i in range(12):
+for n in range(12):
     U.append(0)
     
 def Cn(n):
     global G,g,Q,q,F,f,V,u
     return ((G+1-g[n])**g[n])*((Q**2+1-q[n])**q[n])*((F+1-f[n])**f[n])*(V**u[n])
 
-for i in range(12,58):
-    U.append(Cn(i))
+for n in range(12,58):
+    U.append(Cn(n))
     
 def Bn(n):
     B = 0
@@ -146,31 +156,38 @@ def A1(plotnost):
     for n in range(58):
         A1 += a[n]*plotnost**b[n]*t**(-u[n])*((b[n]+1)*b[n]*D[n]+((b[n]-c[n]*k[n]*plotnost**k[n])*(b[n]-c[n]*k[n]*plotnost**k[n]+1)-c[n]*k[n]**2*plotnost**k[n])*U[n]*math.exp(-c[n]*plotnost**k[n]))
     return A1
-plotnost0 = (10**3*davlenie*Kx**3)/(8.31451*t) #плотность на 0 шаге - приведенная плотность 
+
+plotnost0 = (10**3*davlenie*Kx**3)/(8.31451*tempK) #плотность на 0 шаге - приведенная плотность 
+
 def pirash(plotnost):
     global t
-    pirash = plotnost*t*(1+A0(plotnost))
-    return pirash
-while abs((pirash(plotnost0)-pi)/pi) < 10**(-6):
+    return plotnost*t*(1+A0(plotnost))
+
+while abs((pirash(plotnost0)-pi)/pi) > 10**(-6):
     plotnost0 += ((pi/t) - (1 + A0(plotnost0))*plotnost0)/(1+A1(plotnost0))
+
 def A2(plotnost):
     global a,b,t,u,D,c,k,U
     A2 = 0
     for n in range(58):
         A2 += a[n]*plotnost**b[n]*t**(-u[n])*(1-u[n])*(b[n]*D[n]+(b[n]-c[n]*k[n]*plotnost**k[n])*U[n]*math.exp(-c[n]*plotnost**k[n]))
     return A2
+
 def A3(plotnost):
     global a,b,t,u,D,c,k,U
     A3 = 0
     for n in range(58):
         A3 += a[n]*plotnost**b[n]*t**(-u[n])*u[n]*(1-u[n])*(D[n]+U[n]*math.exp(-c[n]*plotnost**k[n]))
     return A3
+
 A0 = A0(plotnost0)
 A1 = A1(plotnost0)
 A2 = A2(plotnost0)
 A3 = A3(plotnost0)
+
 z = 1 + A0
 cp0r = 0
+
 def cp0ri(i):
     global B0i,C0i,D0i,E0i,F0i,G0i,H0i,I0i,J0i,t
     det = t**(-1)
@@ -184,10 +201,5 @@ cp0r += smes[14]*cp0ri(14)
 det = t**(-1)
 cp0r += smes[9]*(B0i[9] + E0i[9]*((F0i[9]*det)/math.cosh(F0i[9]*det))**2+I0i[9]*((J0i[9]*det)/math.cosh(J0i[9]*det))**2)
 cp0r += smes[13]*(B0i[13] + E0i[13]*((F0i[13]*det)/math.cosh(F0i[13]*det))**2+I0i[13]*((J0i[13]*det)/math.cosh(J0i[13]*det))**2)
-kadiabat = ((1 + A1 + (1 + A2)**2)/(cp0r - 1 + A3))/z
+kadiabat = (1 + A1 + (((1 + A2)**2)/(cp0r - 1 + A3)))/z
 print('Показатель адиабаты равен k = ', kadiabat)
-print(z)
-print(plotnost0)
-print(pi/(t*(1+A0))) 
-
-# Проблема с плотностью
